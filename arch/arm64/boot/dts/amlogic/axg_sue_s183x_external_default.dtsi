@@ -80,7 +80,6 @@
 
 		aml-audio-card,dai-link@1 {
 			format = "i2s";
-			continuous-clock;
 			bitclock-master = <&aml_tdmb>;
 			frame-master = <&aml_tdmb>;
 			cpu {
@@ -118,7 +117,7 @@
 				system-clock-frequency = <24576000>;
 			};
 			codec {
-				sound-dai = <&ma120x0>;
+				sound-dai = <&dummy_codec &ma120x0>;
 			};
 		};
 
