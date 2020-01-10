@@ -226,7 +226,7 @@ static int ma120x0_init(struct snd_soc_codec *codec)
 	if (ret < 0) return ret;
 
 	// set volume to xdB
-	ret = snd_soc_write(codec, MA_vol_db_master__a, 0x34);
+	ret = snd_soc_write(codec, MA_vol_db_master__a, 0x33);
 	if (ret < 0) return ret;
 
 	// set ch0 lim tresh to 0dB
