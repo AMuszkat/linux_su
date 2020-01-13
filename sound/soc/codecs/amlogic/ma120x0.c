@@ -436,17 +436,20 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 
 	pr_info(KERN_INFO "register codec =(%d)\n",ret );
 
-		err_val = ma120x0_init(ma120x0->codec);
+	ma120x0_init(ma120x0->codec);
 
 	pr_info(KERN_INFO " 1st err_val =(%d)\n",err_val );
 
+/*
 		while (err_val != 0) {
 			err_val = ma120x0_init(ma120x0->codec);
 			pr_info(KERN_INFO "err_val =(%d)\n",err_val );
 		}
+*/
 
-	return ret;
 	pr_info(KERN_INFO "probe_ret =(%d)\n",ret );
+	return ret;
+
 }
 
 static int ma120x0_i2c_remove(struct i2c_client *client)
