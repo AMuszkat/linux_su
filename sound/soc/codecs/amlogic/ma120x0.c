@@ -427,26 +427,26 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 
 	i2c_set_clientdata(i2c, ma120x0);
 
-	printk(KERN_INFO "registering codec\n" );
+	pr_info(KERN_INFO "registering codec\n" );
 
 	ret = snd_soc_register_codec(&i2c->dev, &soc_codec_dev_ma120x0,
 						 &ma120x0_dai, 1);
 	if (ret != 0)
 		dev_err(&i2c->dev, "Failed to register codec (%d)\n", ret);
 
-	printk(KERN_INFO "register codec =(%d)\n",ret );
+	pr_info(KERN_INFO "register codec =(%d)\n",ret );
 
 		err_val = ma120x0_init(ma120x0->codec);
 
-	printk(KERN_INFO " 1st err_val =(%d)\n",err_val );
+	pr_info(KERN_INFO " 1st err_val =(%d)\n",err_val );
 
 		while (err_val != 0) {
 			err_val = ma120x0_init(ma120x0->codec);
-			printk(KERN_INFO "err_val =(%d)\n",err_val );
+			pr_info(KERN_INFO "err_val =(%d)\n",err_val );
 		}
 
 	return ret;
-	printk(KERN_INFO "probe_ret =(%d)\n",ret );
+	pr_info(KERN_INFO "probe_ret =(%d)\n",ret );
 }
 
 static int ma120x0_i2c_remove(struct i2c_client *client)
