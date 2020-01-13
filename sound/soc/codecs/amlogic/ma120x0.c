@@ -269,7 +269,7 @@ static int ma120x0_probe(struct snd_soc_codec *codec)
 	register_early_suspend(&(ma120x0->early_suspend));
 #endif
 
-	ma120x0_init(codec);
+	//ma120x0_init(codec);
 
 	return 0;
 }
@@ -388,6 +388,7 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	struct ma120x0_priv *ma120x0;
 	struct ma120x0_platform_data *pdata;
 	int ret;
+	int err_val;
 	const char *codec_name;
 
 	ma120x0 = devm_kzalloc(&i2c->dev, sizeof(struct ma120x0_priv),
@@ -426,10 +427,17 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 
 	i2c_set_clientdata(i2c, ma120x0);
 
-	ret = snd_soc_register_codec(&i2c->dev, &soc_codec_dev_ma120x0,
-				     &ma120x0_dai, 1);
-	if (ret != 0)
-		dev_err(&i2c->dev, "Failed to register codec (%d)\n", ret);
+	err_val = ma120x0_init(ma120x0->codec);
+
+	while (err_val != 0) {
+
+		ret = snd_soc_register_codec(&i2c->dev, &soc_codec_dev_ma120x0,
+					     &ma120x0_dai, 1);
+		if (ret != 0)
+			dev_err(&i2c->dev, "Failed to register codec (%d)\n", ret);
+
+    err_val = ma120x0_init(ma120x0->codec);
+	}
 
 	return ret;
 }
