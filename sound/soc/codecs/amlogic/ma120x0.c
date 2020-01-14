@@ -386,7 +386,6 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	struct ma120x0_priv *ma120x0;
 	struct ma120x0_platform_data *pdata;
 	int ret;
-	int err_val;
 	const char *codec_name;
 
 	ma120x0 = devm_kzalloc(&i2c->dev, sizeof(struct ma120x0_priv),
