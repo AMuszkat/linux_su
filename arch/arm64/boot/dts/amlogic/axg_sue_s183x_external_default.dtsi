@@ -81,6 +81,7 @@
 		aml-audio-card,dai-link@1 {
 			format = "i2s";
 			mclk-fs = <512>;
+			continuous-clock;
 			bitclock-master = <&aml_tdmb>;
 			frame-master = <&aml_tdmb>;
 			cpu {
@@ -107,7 +108,6 @@
 		aml-audio-card,dai-link@2 {
 			format = "i2s";
 			mclk-fs = <512>;
-			continuous-clock;
 			bitclock-master = <&aml_tdmc>;
 			frame-master = <&aml_tdmc>;
 			cpu {
@@ -116,7 +116,6 @@
 				dai-tdm-slot-rx-mask = <1 1>;
 				dai-tdm-slot-num = <2>;
 				dai-tdm-slot-width = <32>;
-				system-clock-frequency = <24576000>;
 			};
 			codec {
 				sound-dai = <&ma120x0>;
@@ -150,7 +149,7 @@
 	status = "okay";
 	pinctrl-names="default";
 	pinctrl-0=<&b_i2c_master>;
-	clock-frequency = <100000>;
+	clock-frequency = <400000>;
 	ma120x0: ma120x0-amp {
 					compatible = "ma,ma120x0";
 					reg = <0x20>;
