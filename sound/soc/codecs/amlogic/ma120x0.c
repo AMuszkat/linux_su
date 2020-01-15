@@ -184,7 +184,7 @@ static int ma120x0_clear_err(struct snd_soc_codec *codec)
 }
 
 
-static int ma120x0_init(struct snd_soc_codec *codec)
+static void ma120x0_init(struct snd_soc_codec *codec)
 {
 	//struct ma120x0_priv *ma120x0 = snd_soc_codec_get_drvdata(codec);
   int ret = 0;
@@ -269,7 +269,9 @@ static int ma120x0_probe(struct snd_soc_codec *codec)
 	register_early_suspend(&(ma120x0->early_suspend));
 #endif
 
-	return ma120x0_init(codec);
+ma120x0_init(codec);
+
+	return 0;
 }
 
 static int ma120x0_remove(struct snd_soc_codec *codec)

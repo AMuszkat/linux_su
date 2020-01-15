@@ -117,6 +117,7 @@
 				dai-tdm-slot-rx-mask = <1 1>;
 				dai-tdm-slot-num = <2>;
 				dai-tdm-slot-width = <32>;
+				system-clock-frequency = <24576000>;
 			};
 			codec {
 				sound-dai = <&ma120x0>;
