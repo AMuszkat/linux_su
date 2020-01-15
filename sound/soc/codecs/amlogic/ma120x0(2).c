@@ -435,7 +435,7 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 
 	pr_info(KERN_INFO "register codec =(%d)\n",ret );
 
-	return ma120x0_init(ma120x0->codec);
+	return ret;
 
 }
 
