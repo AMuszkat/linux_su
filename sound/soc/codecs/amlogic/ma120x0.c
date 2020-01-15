@@ -389,7 +389,7 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	struct ma120x0_platform_data *pdata;
 	int ret;
 	const char *codec_name;
-	int val = 1;
+	//int val = 1;
 
 	ma120x0 = devm_kzalloc(&i2c->dev, sizeof(struct ma120x0_priv),
 			       GFP_KERNEL);
