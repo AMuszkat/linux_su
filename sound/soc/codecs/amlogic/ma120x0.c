@@ -269,7 +269,7 @@ static int ma120x0_probe(struct snd_soc_codec *codec)
 	register_early_suspend(&(ma120x0->early_suspend));
 #endif
 
-ma120x0_init(codec);
+//ma120x0_init(codec);
 
 	return 0;
 }
@@ -434,6 +434,7 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	if (ret != 0) {
 		dev_err(&i2c->dev, "Failed to register codec (%d)\n", ret);
 	} else {
+		msleep(5000);
 		ret = regmap_write(ma120x0->regmap, MA_vol_db_master__a, 0x33);
 	}
 
