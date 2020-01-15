@@ -389,6 +389,7 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	struct ma120x0_platform_data *pdata;
 	int ret;
 	const char *codec_name;
+	int val = 1;
 
 	ma120x0 = devm_kzalloc(&i2c->dev, sizeof(struct ma120x0_priv),
 			       GFP_KERNEL);
@@ -437,6 +438,13 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 		msleep(5000);
 		ret = regmap_write(ma120x0->regmap, MA_vol_db_master__a, 0x33);
 	}
+
+	/*
+	while (val != 0) {
+		msleep(500);
+		val = regmap_write(ma120x0->regmap, MA_vol_db_master__a, 0x33);
+	}
+	*/
 
 	pr_info(KERN_INFO "register codec =(%d)\n",ret );
 
