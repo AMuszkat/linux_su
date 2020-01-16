@@ -80,8 +80,8 @@
 
 		aml-audio-card,dai-link@1 {
 			format = "i2s";
-			mclk-fs = <512>;
-			continuous-clock;
+			mclk-fs = <64>;
+			//continuous-clock;
 			bitclock-master = <&aml_tdmb>;
 			frame-master = <&aml_tdmb>;
 			cpu {
@@ -98,7 +98,7 @@
 				 * from the same MCLK, make sure the these entries for the TDM-B
 				 * and TDM-C links match.
 				 */
-				system-clock-frequency = <24576000>;
+				system-clock-frequency = <2822400>;
 			};
 			codec {
 				sound-dai = <&dummy_codec>;
@@ -107,8 +107,8 @@
 
 		aml-audio-card,dai-link@2 {
 			format = "i2s";
-			mclk-fs = <512>;
-			continuous-clock;
+			mclk-fs = <64>;
+			//continuous-clock;
 			bitclock-master = <&aml_tdmc>;
 			frame-master = <&aml_tdmc>;
 			cpu {
@@ -117,7 +117,7 @@
 				dai-tdm-slot-rx-mask = <1 1>;
 				dai-tdm-slot-num = <2>;
 				dai-tdm-slot-width = <32>;
-				system-clock-frequency = <24576000>;
+				system-clock-frequency = <2822400>;
 			};
 			codec {
 				sound-dai = <&ma120x0>;
