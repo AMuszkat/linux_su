@@ -269,7 +269,7 @@ static int ma120x0_probe(struct snd_soc_codec *codec)
 	register_early_suspend(&(ma120x0->early_suspend));
 #endif
 
-//ma120x0_init(codec);
+ma120x0_init(codec);
 
 	return 0;
 }
