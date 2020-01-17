@@ -435,11 +435,12 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	if (ret != 0)
 		dev_err(&i2c->dev, "Failed to register codec (%d)\n", ret);
 
-		msleep(5000);
-		ret = regmap_write(ma120x0->regmap, MA_vol_db_master__a, 0x33);
-		if (ret != 0)
-			return -EPROBE_DEFER;
-	}
+	msleep(5000);
+	ret = regmap_write(ma120x0->regmap, MA_vol_db_master__a, 0x33);
+
+	if (ret != 0)
+		return -EPROBE_DEFER;
+
 
 	/*
 	while (val != 0) {
