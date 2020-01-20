@@ -1,5 +1,6 @@
 #include <linux/module.h>
 #include <linux/moduleparam.h>
+#include <linux/clk.h>
 #include <linux/init.h>
 #include <linux/delay.h>
 #include <linux/i2c.h>
@@ -52,6 +53,7 @@ struct ma120x0_priv {
 	struct regmap *regmap;
 	struct snd_soc_codec *codec;
 	struct ma120x0_platform_data *pdata;
+	struct clk *mclk;
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 	struct early_suspend early_suspend;
@@ -429,6 +431,28 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 
 	pr_info(KERN_INFO "registering codec\n" );
 
+	ma120x0->mclk = devm_clk_get(&i2c->dev, NULL);
+	if (IS_ERR(ma120x0->mclk)) {
+		ret = PTR_ERR(ma120x0->mclk);
+		/* Defer the probe to see if the clk will be provided later */
+		if (ret == -ENOENT)
+			ret = -EPROBE_DEFER;
+
+		if (ret != -EPROBE_DEFER)
+			dev_err(&i2c->dev, "Failed to get master clock: %d\n",
+				ret);
+		return ret;
+
+	}
+
+	ret = clk_prepare_enable(ma120x0->mclk);
+	if (ret) {
+		dev_err(&i2c->dev, "Error enabling master clock %d\n", ret);
+		return ret;
+	}
+
+	msleep(100);
+
 	ret = snd_soc_register_codec(&i2c->dev, &soc_codec_dev_ma120x0,
 						 &ma120x0_dai, 1);
 
@@ -440,14 +464,6 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 
 	if (ret != 0)
 		return -EPROBE_DEFER;
-
-
-	/*
-	while (val != 0) {
-		msleep(500);
-		val = regmap_write(ma120x0->regmap, MA_vol_db_master__a, 0x33);
-	}
-	*/
 
 	pr_info(KERN_INFO "register codec =(%d)\n",ret );
 
