@@ -78,13 +78,9 @@
 		spk_mute = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_LOW>;
 		pdown-gpios = <&gpio GPIOZ_4 GPIO_ACTIVE_LOW>;
 
-		clocks = <&clkaudio CLKID_AUDIO_MCLK_C
-				&clkc CLKID_HIFI_PLL>;
-		clock-names = "mclk", "clk_srcpll";
-
 		aml-audio-card,dai-link@1 {
 			format = "i2s";
-			mclk-fs = <512>;
+			mclk-fs = <256>;
 			continuous-clock;
 			bitclock-master = <&aml_tdmb>;
 			frame-master = <&aml_tdmb>;
@@ -102,7 +98,7 @@
 				 * from the same MCLK, make sure the these entries for the TDM-B
 				 * and TDM-C links match.
 				 */
-				system-clock-frequency = <24576000>;
+				system-clock-frequency = <24576004>;
 			};
 			codec {
 				sound-dai = <&dummy_codec>;
@@ -111,7 +107,7 @@
 
 		aml-audio-card,dai-link@2 {
 			format = "i2s";
-			mclk-fs = <512>;
+			mclk-fs = <256>;
 			continuous-clock;
 			bitclock-master = <&aml_tdmc>;
 			frame-master = <&aml_tdmc>;
@@ -121,7 +117,7 @@
 				dai-tdm-slot-rx-mask = <1 1>;
 				dai-tdm-slot-num = <2>;
 				dai-tdm-slot-width = <32>;
-				system-clock-frequency = <24576000>;
+				system-clock-frequency = <245760004>;
 			};
 			codec {
 				sound-dai = <&ma120x0>;
@@ -164,8 +160,9 @@
 					//enable_gp-gpios = <&gpio GPIOZ_4 GPIO_ACTIVE_LOW>;
 					status = "okay";
 					clocks = <&clkaudio CLKID_AUDIO_MCLK_C
+						  &clkaudio CLKID_AUDIO_MCLK_B
 							&clkc CLKID_HIFI_PLL>;
-					clock-names = "mclk", "clk_srcpll";
+					clock-names = "mclk_c", "mclk_b", "clk_srcpll";
 	};
 };
 
