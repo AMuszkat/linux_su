@@ -84,7 +84,7 @@
 
 		aml-audio-card,dai-link@1 {
 			format = "i2s";
-			mclk-fs = <256>;
+			mclk-fs = <512>;
 			continuous-clock;
 			bitclock-master = <&aml_tdmb>;
 			frame-master = <&aml_tdmb>;
@@ -111,7 +111,7 @@
 
 		aml-audio-card,dai-link@2 {
 			format = "i2s";
-			mclk-fs = <256>;
+			mclk-fs = <512>;
 			continuous-clock;
 			bitclock-master = <&aml_tdmc>;
 			frame-master = <&aml_tdmc>;
