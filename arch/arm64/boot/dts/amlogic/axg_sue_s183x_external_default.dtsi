@@ -78,6 +78,10 @@
 		spk_mute = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_LOW>;
 		pdown-gpios = <&gpio GPIOZ_4 GPIO_ACTIVE_LOW>;
 
+		clocks = <&clkaudio CLKID_AUDIO_MCLK_C
+				&clkc CLKID_HIFI_PLL>;
+		clock-names = "mclk", "clk_srcpll";
+
 		aml-audio-card,dai-link@1 {
 			format = "i2s";
 			mclk-fs = <256>;

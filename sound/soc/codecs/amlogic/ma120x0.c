@@ -448,10 +448,10 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	 return PTR_ERR(ma120x0->mclk);
  }
 
- //clk_set_parent(ma120x0->mclk, ma120x0->clk_srcpll);
+ clk_set_parent(ma120x0->mclk, ma120x0->clk_srcpll);
 
- clk_set_rate(ma120x0->clk_srcpll, 12371594);
- clk_set_rate(ma120x0->mclk, 12371594);
+ clk_set_rate(ma120x0->clk_srcpll, 491520080UL);
+ clk_set_rate(ma120x0->mclk, 24576004UL);
 
  ret = clk_prepare_enable(ma120x0->mclk);
  if (ret) {
