@@ -540,7 +540,7 @@ static int aml_card_dai_init(struct snd_soc_pcm_runtime *rtd)
 		 * Always set the BCLK to MCLK/8 and the WCLK to BCLK/64 for the
 		 * early clocks.
 		 */
-		ret |= snd_soc_dai_set_clkdiv(cpu, 0, 1);
+		ret |= snd_soc_dai_set_clkdiv(cpu, 0, 8);
 		ret |= snd_soc_dai_set_bclk_ratio(cpu, 64);
 
 		ret |= clk_prepare_enable(dai_props->cpu_dai.clk);

@@ -53,6 +53,7 @@ struct ma120x0_priv {
 	struct regmap *regmap;
 	struct snd_soc_codec *codec;
 	struct ma120x0_platform_data *pdata;
+	struct clk *clk_srcpll;
 	struct clk *mclk;
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
@@ -391,6 +392,9 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	struct ma120x0_platform_data *pdata;
 	int ret;
 	const char *codec_name;
+	int mclk_rate;
+	int clk_srcpll_rate;
+
 	//int val = 1;
 
 	ma120x0 = devm_kzalloc(&i2c->dev, sizeof(struct ma120x0_priv),
@@ -429,29 +433,47 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 
 	i2c_set_clientdata(i2c, ma120x0);
 
-	pr_info(KERN_INFO "registering codec\n" );
 
-	ma120x0->mclk = devm_clk_get(&i2c->dev, NULL);
-	if (IS_ERR(ma120x0->mclk)) {
-		ret = PTR_ERR(ma120x0->mclk);
-		/* Defer the probe to see if the clk will be provided later */
-		if (ret == -ENOENT)
-			ret = -EPROBE_DEFER;
+ pr_info(KERN_INFO "geting clock......\n" );
 
-		if (ret != -EPROBE_DEFER)
-			dev_err(&i2c->dev, "Failed to get master clock: %d\n",
-				ret);
-		return ret;
+ ma120x0->clk_srcpll = devm_clk_get(&i2c->dev, "clk_srcpll");
+ if (IS_ERR(ma120x0->clk_srcpll)) {
+ 	dev_err(&i2c->dev, "Can't retrieve mpll2 clock\n");
+ 	return PTR_ERR(ma120x0->mclk);
+ }
 
-	}
+ ma120x0->mclk = devm_clk_get(&i2c->dev, "mclk");
+ if (IS_ERR(ma120x0->mclk)) {
+	 dev_err(&i2c->dev, "Can't retrieve mclk\n");
+	 return PTR_ERR(ma120x0->mclk);
+ }
 
-	ret = clk_prepare_enable(ma120x0->mclk);
+ //clk_set_parent(ma120x0->mclk, ma120x0->clk_srcpll);
+
+ clk_set_rate(ma120x0->clk_srcpll, 12371594);
+ clk_set_rate(ma120x0->mclk, 12371594);
+
+ ret = clk_prepare_enable(ma120x0->mclk);
+ if (ret) {
+ 	dev_err(&i2c->dev, "Error enabling master clock %d\n", ret);
+ 	return ret;
+ }
+
+	ret = clk_prepare_enable(ma120x0->clk_srcpll);
 	if (ret) {
 		dev_err(&i2c->dev, "Error enabling master clock %d\n", ret);
 		return ret;
 	}
 
+	pr_info(KERN_INFO " clk prepare enable = %d\n",ret );
+
+	mclk_rate = clk_get_rate(ma120x0->mclk);
+	clk_srcpll_rate = clk_get_rate(ma120x0->clk_srcpll);
+
 	msleep(100);
+
+pr_info(KERN_INFO "mclk rate is (%d)\n", mclk_rate);
+pr_info(KERN_INFO "clk_srcpll rate (%d)\n", clk_srcpll_rate);
 
 	ret = snd_soc_register_codec(&i2c->dev, &soc_codec_dev_ma120x0,
 						 &ma120x0_dai, 1);
