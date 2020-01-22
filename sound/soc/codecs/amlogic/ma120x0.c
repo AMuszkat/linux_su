@@ -55,7 +55,6 @@ struct ma120x0_priv {
 	struct ma120x0_platform_data *pdata;
 	struct clk *clk_srcpll;
 	struct clk *mclk_c;
-	struct clk *mclk_b;
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 	struct early_suspend early_suspend;
@@ -394,7 +393,6 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	int ret;
 	const char *codec_name;
 	int mclk_rate_c;
-	int mclk_rate_b;
 	int clk_srcpll_rate;
 
 	//int val = 1;
@@ -435,7 +433,6 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 
 	i2c_set_clientdata(i2c, ma120x0);
 
-
  pr_info(KERN_INFO "geting clock......\n" );
 
  ma120x0->clk_srcpll = devm_clk_get(&i2c->dev, "clk_srcpll");
@@ -450,27 +447,14 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	 return PTR_ERR(ma120x0->mclk_c);
  }
 
- ma120x0->mclk_b = devm_clk_get(&i2c->dev, "mclk_b");
- if (IS_ERR(ma120x0->mclk_b)) {
-	 dev_err(&i2c->dev, "Can't retrieve mclk\n");
-	 return PTR_ERR(ma120x0->mclk_b);
- }
-
  //clk_set_parent(ma120x0->mclk, ma120x0->clk_srcpll);
 
- clk_set_rate(ma120x0->clk_srcpll, 491520080);
- clk_set_rate(ma120x0->mclk_c, 24576004);
- clk_set_rate(ma120x0->mclk_b, 24576004);
+ clk_set_rate(ma120x0->clk_srcpll, 24576000 * 20);
+ clk_set_rate(ma120x0->mclk_c, 24576000);
 
  ret = clk_prepare_enable(ma120x0->mclk_c);
  if (ret) {
  	dev_err(&i2c->dev, "Error enabling master clock c %d\n", ret);
- 	return ret;
- }
-
- ret = clk_prepare_enable(ma120x0->mclk_b);
- if (ret) {
- 	dev_err(&i2c->dev, "Error enabling master clock b%d\n", ret);
  	return ret;
  }
 
@@ -483,12 +467,10 @@ static int ma120x0_i2c_probe(struct i2c_client *i2c,
 	pr_info(KERN_INFO " clk prepare enable = %d\n",ret );
 
 	mclk_rate_c = clk_get_rate(ma120x0->mclk_c);
-	mclk_rate_b = clk_get_rate(ma120x0->mclk_b);
 	clk_srcpll_rate = clk_get_rate(ma120x0->clk_srcpll);
 
 	msleep(100);
 
-pr_info(KERN_INFO "mclk rate is (%d)\n", mclk_rate_b);
 pr_info(KERN_INFO "mclk rate is (%d)\n", mclk_rate_c);
 pr_info(KERN_INFO "clk_srcpll rate (%d)\n", clk_srcpll_rate);
 
