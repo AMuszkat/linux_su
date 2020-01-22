@@ -120,7 +120,7 @@
 				system-clock-frequency = <22579200>;
 			};
 			codec {
-				sound-dai = < &dummy_codec &ma120x0>;
+				sound-dai = <&dummy_codec &ma120x0p>;
 			};
 		};
 
@@ -152,8 +152,8 @@
 	pinctrl-names="default";
 	pinctrl-0=<&b_i2c_master>;
 	clock-frequency = <400000>;
-	ma120x0: ma120x0-amp {
-					compatible = "ma,ma120x0";
+	ma120x0p: ma120x0p-amp {
+					compatible = "ma,ma120x0p";
 					reg = <0x20>;
 					#sound-dai-cells = <0>;
 					//mute_gp-gpios = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_LOW>;
@@ -352,12 +352,15 @@
 		};
 	};
 
+
+/*
 	spdifout_pins:spidfout_pins {
 		mux {
 			groups = "spdif_out_a20";
 			function = "spdif_out";
 		};
 	};
+	*/
 
 	spdifin_pins:spidfin_pins {
 		mux {

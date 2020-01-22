@@ -136,14 +136,14 @@ config AMLOGIC_SND_SOC_TAS575X
 		Enable Support for Texas INstruments TAS575X CODEC.
 		Select this if your TAS575X is connected via an I2C bus.
 
-config AMLOGIC_SND_SOC_MA120X0
-	bool "Infineon MA120X0"
+config AMLOGIC_SND_SOC_MA120X0P
+	bool "Infineon MA120X0P"
 	depends on AMLOGIC_SND_SOC_CODECS
 	depends on I2C
 	default n
 	help
-		Enable Support for Infineon MA120X0 CODEC.
-		Select this if your MA120X0 is connected via an I2C bus.
+		Enable Support for Infineon MA120X0P CODEC.
+		Select this if your MA120X0P is connected via an I2C bus.
 
 config AMLOGIC_SND_SOC_ES7243
 	bool "EVEREST SEMI ES7243"
