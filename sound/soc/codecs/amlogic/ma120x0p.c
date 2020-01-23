@@ -230,7 +230,7 @@ static int ma120x0p_hw_params(struct snd_pcm_substream *substream,
 
 static int ma120x0p_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
 {
-	int val = 0;
+	u16 val = 0;
 
 	struct ma120x0p_priv *ma120x0p;
 
@@ -239,9 +239,9 @@ static int ma120x0p_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
 	ma120x0p = snd_soc_codec_get_drvdata(codec);
 
 	if (mute)
-		val = 1;
+		val = 0x80;
 	else
-		val = 0;
+		val = 0x00;
 
 	snd_soc_update_bits(codec, ma_audio_proc_mute__a, ma_audio_proc_mute__mask, val);
 
