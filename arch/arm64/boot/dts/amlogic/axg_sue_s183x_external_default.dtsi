@@ -75,7 +75,7 @@
 		aml-audio-card,loopback = <&aml_loopback>;
 		*/
 
-		spk_mute = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_LOW>;
+		//spk_mute = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_LOW>;
 		pdown-gpios = <&gpio GPIOZ_4 GPIO_ACTIVE_LOW>;
 
 		aml-audio-card,dai-link@1 {
@@ -156,13 +156,13 @@
 					compatible = "ma,ma120x0p";
 					reg = <0x20>;
 					#sound-dai-cells = <0>;
-					//mute_gp-gpios = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_LOW>;
-					//enable_gp-gpios = <&gpio GPIOZ_4 GPIO_ACTIVE_LOW>;
 					status = "okay";
 					clocks = <&clkaudio CLKID_AUDIO_MCLK_C
 						  &clkaudio CLKID_AUDIO_MCLK_B
 							&clkc CLKID_HIFI_PLL>;
 					clock-names = "mclk_c", "mclk_b", "clk_srcpll";
+					enable-gpios = <&gpio GPIOA_20 GPIO_ACTIVE_HIGH>;
+					mute-gpios = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_HIGH>;
 	};
 };
 
@@ -226,7 +226,7 @@
 
 		interrupt-names = "irq_spdifin";
 		pinctrl-names = "spdif_pins";
-		pinctrl-0 = <&spdifout_pins &spdifin_pins>;
+		pinctrl-0 = <&spdifin_pins>;
 		status = "okay";
 	};
 

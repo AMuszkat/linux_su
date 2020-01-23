@@ -12,6 +12,7 @@
 #include <sound/tlv.h>
 #include <sound/tas57xx.h>
 #include <linux/amlogic/aml_gpio_consumer.h>
+#include <linux/gpio/consumer.h>
 
 #include "ma120x0p.h"
 
@@ -62,6 +63,8 @@ struct ma120x0p_priv {
 	struct ma120x0p_platform_data *pdata;
 	struct clk *clk_srcpll;
 	struct clk *mclk_c;
+	struct gpio_desc *enable_gpio;
+	struct gpio_desc *mute_gpio;
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 	struct early_suspend early_suspend;
@@ -533,6 +536,26 @@ static int ma120x0p_i2c_probe(struct i2c_client *i2c,
 	if (!ma120x0p)
 		return -ENOMEM;
 
+	//Mute ma120x0p
+	ma120x0p->mute_gpio = devm_gpiod_get(&i2c->dev, "mute",
+																							GPIOD_OUT_LOW);
+	if (IS_ERR(ma120x0p->mute_gpio)) {
+		ret = PTR_ERR(ma120x0p->mute_gpio);
+		dev_err(&i2c->dev, "Failed to get ma120x0p mute gpio line: %d\n", ret);
+		return ret;
+	}
+	msleep(500);
+
+	//Disable ma120x0p
+	ma120x0p->enable_gpio = devm_gpiod_get(&i2c->dev, "enable",
+																						GPIOD_OUT_HIGH);
+	if (IS_ERR(ma120x0p->enable_gpio)) {
+		ret = PTR_ERR(ma120x0p->enable_gpio);
+		dev_err(&i2c->dev, "Failed to get ma120x0p enable gpio line: %d\n", ret);
+		return ret;
+	}
+	msleep(500);
+
 	ma120x0p->regmap = devm_regmap_init_i2c(i2c, &ma120x0p_regmap);
 	if (IS_ERR(ma120x0p->regmap)) {
 		ret = PTR_ERR(ma120x0p->regmap);
@@ -594,16 +617,19 @@ static int ma120x0p_i2c_probe(struct i2c_client *i2c,
 		dev_err(&i2c->dev, "Error enabling master clock %d\n", ret);
 		return ret;
 	}
+	msleep(300);
 
 	pr_info(KERN_INFO " clk prepare enable = %d\n",ret );
 
 	mclk_rate_c = clk_get_rate(ma120x0p->mclk_c);
 	clk_srcpll_rate = clk_get_rate(ma120x0p->clk_srcpll);
 
-	msleep(100);
+	pr_info(KERN_INFO "mclk rate is (%d)\n", mclk_rate_c);
+	pr_info(KERN_INFO "clk_srcpll rate (%d)\n", clk_srcpll_rate);
 
-pr_info(KERN_INFO "mclk rate is (%d)\n", mclk_rate_c);
-pr_info(KERN_INFO "clk_srcpll rate (%d)\n", clk_srcpll_rate);
+	//Enable ma120x0p
+	gpiod_set_value_cansleep(ma120x0p->enable_gpio, 0);
+	msleep(300);
 
 	ret = snd_soc_register_codec(&i2c->dev, &soc_codec_dev_ma120x0p,
 						 &ma120x0p_dai, 1);
@@ -618,8 +644,10 @@ pr_info(KERN_INFO "clk_srcpll rate (%d)\n", clk_srcpll_rate);
 
 	pr_info(KERN_INFO "register codec =(%d)\n",ret );
 
-	return ret;
+	//Unmute ma120x0p
+	gpiod_set_value_cansleep(ma120x0p->mute_gpio, 1);
 
+	return ret;
 }
 
 static int ma120x0p_i2c_remove(struct i2c_client *client)
