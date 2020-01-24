@@ -22,8 +22,10 @@
 
 
 / {
+	/*
 	ethmac: ethernet@0xff3f0000 {
 		compatible = "amlogic, gxbb-eth-dwmac";
+		status = "disabled";
 
 		pinctrl-0 = <&external_eth_pins_x>;
 		pinctrl-names = "external_eth_pins";
@@ -40,6 +42,7 @@
 		snps,reset-active-low = <1>;
 		snps,reset-delays-us = <1000 10000 1000>;
 	};
+	*/
 
 	/* Sound iomap */
 	aml_snd_iomap {
@@ -162,7 +165,7 @@
 							&clkc CLKID_HIFI_PLL>;
 					clock-names = "mclk_c", "mclk_b", "clk_srcpll";
 					enable-gpios = <&gpio GPIOA_20 GPIO_ACTIVE_HIGH>;
-					mute-gpios = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_HIGH>;
+					mute-gpios = <&gpio GPIOX_15 GPIO_ACTIVE_HIGH>;
 	};
 };
 
@@ -308,6 +311,7 @@
 };
 
 &pinctrl_periphs {
+	/*
 	external_eth_pins_x:external_eth_pins_x {
 		mux {
 			groups = "eth_mdio_x",
@@ -322,6 +326,7 @@
 			function = "eth";
 		};
 	};
+	*/
 
 	tdmin_b_pins:tdmin_b_pins {
 		groups = "tdmb_din0",

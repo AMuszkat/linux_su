@@ -544,7 +544,7 @@ static int ma120x0p_i2c_probe(struct i2c_client *i2c,
 		dev_err(&i2c->dev, "Failed to get ma120x0p mute gpio line: %d\n", ret);
 		return ret;
 	}
-	msleep(500);
+	msleep(2000);
 
 	//Disable ma120x0p
 	ma120x0p->enable_gpio = devm_gpiod_get(&i2c->dev, "enable",

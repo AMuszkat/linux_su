@@ -849,6 +849,7 @@
 }; /* end of pinctrl_aobus */
 
 &pinctrl_periphs {
+	/*
 	external_eth_pins:external_eth_pins {
 		mux {
 			groups = "eth_mdio_y",
@@ -868,6 +869,7 @@
 			function = "eth";
 		};
 	};
+	*/
 
 	ao_b_uart_pins:ao_b_uart {
 		mux {
