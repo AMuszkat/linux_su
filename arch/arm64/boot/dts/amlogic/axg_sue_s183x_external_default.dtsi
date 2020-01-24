@@ -182,13 +182,14 @@
 	aml_tdmb: tdmb {
 		compatible = "amlogic, snd-tdmb";
 		#sound-dai-cells = <0>;
-		dai-tdm-lane-slot-mask-in = <1>;
+		//dai-tdm-lane-slot-mask-in = <1>;
+		dai-tdm-lane-slot-mask-in = <1 1 1 1>;
 		dai-tdm-clk-sel = <1>;
 		clocks = <&clkaudio CLKID_AUDIO_MCLK_B
 				&clkc CLKID_HIFI_PLL>;
 		clock-names = "mclk", "clk_srcpll";
 		pinctrl-names = "tdm_pins";
-		pinctrl-0 = <&tdmin_b_pins>;
+		pinctrl-0 = <&tdmout_b_pins &tdmin_b_pins>;
 		status = "okay";
 	};
 
@@ -329,9 +330,11 @@
 	*/
 
 	tdmin_b_pins:tdmin_b_pins {
-		groups = "tdmb_din0",
-			"tdmb_fs";
+		mux {
+			groups = "tdmb_din0";
+			//"tdmb_fs";
 		function = "tdmb_in";
+		};
 	};
 
 	tdmc_mclk_pins:tdmc_mclk_pins {
@@ -354,6 +357,14 @@
 		mux {
 			groups = "tdmc_din1";
 			function = "tdmc_in";
+		};
+	};
+
+	tdmout_b_pins: tdmout_b_pins {
+		mux {
+			groups = "tdmb_sclk",
+				"tdmb_fs";
+			function = "tdmb_out";
 		};
 	};
 
